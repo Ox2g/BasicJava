@@ -1,6 +1,5 @@
 package me.code41.basic;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.List;
  */
 public class HashMapDemo {
     private final static boolean flag = true;
+
     public static void main(String[] args) {
         if (flag) {
             System.out.println(1);
@@ -56,10 +56,11 @@ public class HashMapDemo {
         Integer f = 321;
         Long g = 3L;
         System.out.println(c == d);
-        System.out.println(e ==f);
+        System.out.println(e == f);
         System.out.println(c == (a + b));
-        System.out.println(c.equals(a+b));
-        System.out.println(g==(a+b));
-        System.out.println(g.equals(a+b));
+        System.out.println(c.equals(a + b));
+        System.out.println(g == (a + b));
+        System.out.println(g.equals(a + b));
+        System.out.println("====================");
     }
 }
