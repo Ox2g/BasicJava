@@ -1,8 +1,6 @@
 package me.code41.basic;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by liushiyao on 2016/5/11.
@@ -11,6 +9,17 @@ public class HashMapDemo {
     private final static boolean flag = true;
 
     public static void main(String[] args) {
+        HashMap<Integer, String> hashMap = new HashMap<>();
+        hashMap.put(111, "hello");
+        String oldValue = hashMap.put(111, "world");
+        System.out.println("oldValue=>" + oldValue);
+        Iterator<Map.Entry<Integer, String>> iterator = hashMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = iterator.next();
+            System.out.println(entry.getKey() + "...." + entry.getValue());
+        }
+
+
         if (flag) {
             System.out.println(1);
         } else {
