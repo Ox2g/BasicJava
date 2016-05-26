@@ -1,9 +1,6 @@
 package me.code41.basic;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Created by liushiyao on 2016/5/18.
@@ -31,6 +28,9 @@ public class ListDemo {
     }
 
     public static void main(String[] args) {
-        arrayListIterator();
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        linkedList.add(1);
+        System.out.println(linkedList.getFirst());
+//        arrayListIterator();
     }
 }
