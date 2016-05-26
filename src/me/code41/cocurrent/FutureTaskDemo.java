@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
+ * ThreadPoolExecutor submit demo for callable & runnable
+ * callable是可以携带返回值的，可以依据这个进行多线程模型框架的开发
  * Created by liushiyao on 2016/5/26.
  */
 public class FutureTaskDemo {
@@ -16,22 +18,30 @@ public class FutureTaskDemo {
 //            final int finalI = i;
 //            futureTaskList.add((Future<RunnableTask>) executor.submit(new RunnableTask(finalI, countDownLatch)));
 //        }
-        List<Future<CallableTask>> futureTaskList = new ArrayList<>();
+        List<Future> futureTaskList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             final int finalI = i;
-            futureTaskList.add((Future<CallableTask>) executor.submit(new RunnableTask(finalI, countDownLatch)));
+            futureTaskList.add(executor.submit(new CallableTask(finalI, countDownLatch)));
         }
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(futureTaskList);
         executor.shutdown();
+        for (Future future : futureTaskList) {
+            try {
+                System.out.println(future.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 
-class CallableTask implements Callable<List> {
+class CallableTask implements Callable<Object> {
 
     private int sleepTimeUnit;
     private CountDownLatch countDownLatch;
@@ -48,7 +58,7 @@ class CallableTask implements Callable<List> {
      * @throws Exception if unable to compute a result
      */
     @Override
-    public List call() throws Exception {
+    public Object call() throws Exception {
         long start = System.currentTimeMillis();
         System.out.println("Thread start.." + Thread.currentThread().getName());
         try {
