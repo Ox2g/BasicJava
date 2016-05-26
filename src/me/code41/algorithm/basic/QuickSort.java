@@ -19,6 +19,10 @@ public class QuickSort {
         quickSort(array, p + 1, end);
     }
 
+    private static int partition(int[] array, int begin, int end) {
+        return 0;
+    }
+
     private static int partition1(int[] array, int begin, int end) {
         int tmp = array[begin];    //数组的第一个作为中轴
         while (begin < end) {
