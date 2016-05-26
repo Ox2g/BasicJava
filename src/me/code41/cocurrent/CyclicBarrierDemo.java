@@ -8,7 +8,12 @@ import java.util.concurrent.*;
 public class CyclicBarrierDemo {
     public static void main(String[] args) {
 
-        final CyclicBarrier cyclicBarrier = new CyclicBarrier(4);
+        final CyclicBarrier cyclicBarrier = new CyclicBarrier(4, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("集齐龙珠，召唤神龙");
+            }
+        });
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 3, 10000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(1), new ThreadPoolExecutor.CallerRunsPolicy());
         for (int i = 0; i < 3; i++) {
