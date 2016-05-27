@@ -11,13 +11,59 @@ import java.util.concurrent.*;
  */
 public class FutureTaskDemo {
     public static void main(String[] args) {
+        callableTaskExecutor();
+//        runnableTaskExecutor();
+//        completionServiceExecutor();
+    }
+
+    public static void completionServiceExecutor() {
+        CountDownLatch countDownLatch = new CountDownLatch(5);
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 5, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(2), new ThreadPoolExecutor.CallerRunsPolicy());
+        CompletionService completionService = new ExecutorCompletionService(executor);
+        for (int i = 0; i < 5; i++) {
+            final int finalI = i;
+            completionService.submit(new CallableTask(finalI, countDownLatch));
+        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < 5; i++) {
+            try {
+                Future future = completionService.take();
+                System.out.println(future.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        executor.shutdown();
+    }
+
+    public static void runnableTaskExecutor() {
         CountDownLatch countDownLatch = new CountDownLatch(5);
         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 5, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1), new ThreadPoolExecutor.CallerRunsPolicy());
-//        List<Future<RunnableTask>> futureTaskList = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            final int finalI = i;
-//            futureTaskList.add((Future<RunnableTask>) executor.submit(new RunnableTask(finalI, countDownLatch)));
-//        }
+        List<Future<RunnableTask>> futureTaskList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            final int finalI = i;
+            futureTaskList.add((Future<RunnableTask>) executor.submit(new RunnableTask(finalI, countDownLatch)));
+        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        executor.shutdown();
+        for (Future future : futureTaskList) {
+            System.out.println(future.isDone());
+        }
+    }
+
+    public static void callableTaskExecutor() {
+        CountDownLatch countDownLatch = new CountDownLatch(5);
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(2), new ThreadPoolExecutor.CallerRunsPolicy());
         List<Future> futureTaskList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             final int finalI = i;
@@ -71,7 +117,7 @@ class CallableTask implements Callable<Object> {
 
         ArrayList<String> result = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            result.add(Thread.currentThread().getName() + "..." + i);
+            result.add(Thread.currentThread().getName() + "..." + i + "/" + System.currentTimeMillis());
         }
         return result;
     }
