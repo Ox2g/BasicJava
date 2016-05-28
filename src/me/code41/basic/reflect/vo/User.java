@@ -13,4 +13,15 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String hello() {
+        String hello = "hello-" + name;
+        System.out.println(hello);
+        return hello;
+    }
+
+    public static String welcome(String customer) {
+        System.out.println("welcome-" + customer);
+        return "welcome-" + customer;
+    }
 }

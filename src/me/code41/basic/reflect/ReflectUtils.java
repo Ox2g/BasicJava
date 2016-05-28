@@ -3,6 +3,9 @@ package me.code41.basic.reflect;
 import me.code41.basic.reflect.vo.User;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
@@ -11,7 +14,7 @@ import java.util.*;
 public class ReflectUtils {
     private static Map<String, Object> OBJECT_POOL = new HashMap<>();
 
-    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         Map<String, String> initParam;
         List<Map<String, String>> initParams = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
@@ -36,7 +39,7 @@ public class ReflectUtils {
         }
     }
 
-    public static void initPool(List<Map<String, String>> initParams) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static void initPool(List<Map<String, String>> initParams) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if (initParams == null || initParams.size() == 0) return;
         for (Map<String, String> item : initParams) {
             String id = item.get("id");
@@ -61,6 +64,20 @@ public class ReflectUtils {
             }
 
             OBJECT_POOL.put(id, object);
+
+            // class方法调用
+            Method helloMethod = clazz.getMethod("hello", null);
+            String result = (String) helloMethod.invoke(object, null);
+            System.out.println("result=>" + result + "...method type=>" + Modifier.isStatic(helloMethod.getModifiers()));
+
+            // class静态方法调用
+            Method[] methods = clazz.getMethods();
+            for (Method method : methods) {
+                if (Modifier.isStatic(method.getModifiers())) {
+                    String staticResult = (String) method.invoke(object, "LSY");
+                    System.out.println("static method result=>" + staticResult + "...method type=>" + Modifier.isStatic(method.getModifiers()));
+                }
+            }
         }
     }
 
