@@ -44,7 +44,7 @@ public class ReflectUtils {
         for (Map<String, String> item : initParams) {
             String id = item.get("id");
             String className = item.get("class");
-            Class clazz = getInstance(className);
+            Class clazz = getInstanceByClassLoader(className);
             // new instance
             Object object = clazz.newInstance();
             // set values
@@ -83,6 +83,14 @@ public class ReflectUtils {
 
     public static Class getInstance(String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         return Class.forName(className);
+    }
+
+    public static Class getInstanceByClassLoader(String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        System.out.println(classLoader);
+        System.out.println(classLoader.getParent());
+        System.out.println(classLoader.getParent().getParent());
+        return classLoader.loadClass(className);
     }
 
     public static Object getObject(String id) {
