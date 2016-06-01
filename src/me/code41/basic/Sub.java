@@ -11,7 +11,8 @@ public class Sub {
         System.out.println("three");
     }
     public static class Child extends Sub {
-        private static int a = 3;
+        private int a = 3;
+//        private static int a = 3;
 
         public void test() {
             System.out.println(a);
