@@ -1,7 +1,5 @@
 package me.code41.cocurrent;
 
-import java.util.Random;
-
 /**
  * Created by liushiyao on 2016/6/12.
  */
