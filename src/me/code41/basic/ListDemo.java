@@ -24,7 +24,12 @@ public class ListDemo {
         while (listIteratorDesc.hasPrevious()) {
             System.out.println(listIteratorDesc.previous() + "---------" + listIteratorDesc.previousIndex());
         }
-
+        
+        
+        
+        
+        
+        
     }
 
     public static void main(String[] args) {
